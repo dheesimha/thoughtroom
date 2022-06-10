@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
+import Write from "./components/Pages/Write/Write";
 
 function App() {
   return (
-    <div>App</div>
-  )
+    <div>
+      App
+      <Write />
+    </div>
+  );
 }
 
-export default App
+export default App;
