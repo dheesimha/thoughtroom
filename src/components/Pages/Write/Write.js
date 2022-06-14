@@ -1,17 +1,26 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 function Write() {
   let [textarea, setTextArea] = useState("");
-  let [blogs, setBlogs] = useState([]);
-
+  let [blogList, setBlogList] = useState([]);
   let updateText = (e) => {
     setTextArea(e.target.value);
   };
 
   let submitHandler = (e) => {
     e.preventDefault();
-    setBlogs(blogs.concat(e.target[0].value));
-    setTextArea("");
+    let newBlog = {
+      content: e.target[0].value,
+      date: new Date(),
+      important: Math.random() > 0.5 ? true : false,
+    };
+    axios
+      .post("http://localhost:3001/blogs", newBlog)
+      .then((res) => {
+        setBlogList(blogList.concat(res.data));
+      })
+      .then(setTextArea(""));
   };
   return (
     <div className="write">
@@ -26,14 +35,6 @@ function Write() {
         ></textarea>
         <button type="submit">Submit</button>
       </form>
-
-      <div className="blogs">
-        {blogs.map((blog, index) => {
-          return <p key={index}>{blog}</p>;
-        })}
-
-        {console.log(`Rendered ${blogs.length} blogs`)}
-      </div>
     </div>
   );
 }
