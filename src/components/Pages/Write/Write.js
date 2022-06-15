@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import blogcrud from "../../../services/blogs";
 
 function Write() {
   let [textarea, setTextArea] = useState("");
@@ -15,8 +15,8 @@ function Write() {
       date: new Date(),
       important: Math.random() > 0.5 ? true : false,
     };
-    axios
-      .post("http://localhost:3001/blogs", newBlog)
+    blogcrud
+      .createBlogs(newBlog)
       .then((res) => {
         setBlogList(blogList.concat(res.data));
       })

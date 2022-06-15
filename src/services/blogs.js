@@ -1,21 +1,28 @@
 import axios from "axios";
 
-let baseUrl = "http://localhost:3001/blogs";
+let baseUrl = "/api/blogs";
 
-const getAll = () => {
+const getAllBlogs = () => {
   return axios.get(baseUrl);
 };
 
-const create = (item) => {
+const createBlogs = (item) => {
   return axios.post(baseUrl, item);
 };
 
-const update = (id, newObj) => {
-  return axios.update(`${baseUrl}/${id}`, newObj);
+const updateBlogs = (id, newObj) => {
+  return axios.put(`${baseUrl}/${id}`, newObj);
 };
 
-export default {
-  getAll,
-  create,
-  update,
+const deleteBlogs = (id) => {
+  return axios.delete(`${baseUrl}/${id}`);
 };
+
+let blogcrud = {
+  getAllBlogs,
+  createBlogs,
+  updateBlogs,
+  deleteBlogs,
+};
+
+export default blogcrud;

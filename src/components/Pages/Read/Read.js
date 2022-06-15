@@ -1,43 +1,51 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import blogcrud from "../../../services/blogs";
 
 function Read() {
   let [displayBlogs, setDisplayBlogs] = useState([]);
 
   let updatebtn = (e) => {
-    let updateBlog = displayBlogs.find((blog) => blog.id === e.target.id);
+    let updateBlog = displayBlogs.find(
+      (blog) => JSON.stringify(blog.id) === e.target.id
+    );
 
+    console.log(typeof e.target.id);
     let text = prompt("Enter the updated content");
 
     let obj = { ...updateBlog, content: text };
 
-    axios
-      .put(`http://localhost:3001/blogs/${e.target.id}`, obj)
+    console.log(updateBlog);
+
+    blogcrud
+      .updateBlogs(e.target.id, obj)
       .then((res) =>
         setDisplayBlogs(
           displayBlogs.map((blog) =>
-            blog.id !== e.target.id ? blog : res.data
+            JSON.stringify(blog.id) !== e.target.id ? blog : res.data
           )
         )
       );
   };
 
   let deletebtn = (e) => {
-    let tempBlog = [];
-    axios
-      .delete(`http://localhost:3001/blogs/${e.target.id}`)
+    // axios
+    //   .delete(`http://localhost:3001/blogs/${e.target.id}`)
+    blogcrud
+      .deleteBlogs(e.target.id)
       .then(
-        (tempBlog = displayBlogs.filter((blog) => blog.id !== e.target.id)),
-        setDisplayBlogs(tempBlog),
-        console.log(tempBlog)
+        setDisplayBlogs(
+          displayBlogs.filter((blog) => JSON.stringify(blog.id) !== e.target.id)
+        )
       )
 
       .then(console.log("Deleted " + e.target.id));
   };
 
   let renderBlogs = () => {
-    axios.get("http://localhost:3001/blogs").then((res) => {
-      setDisplayBlogs(res.data);
+    // axios.get("http://localhost:3001/blogs")
+
+    blogcrud.getAllBlogs().then((res) => {
+      return setDisplayBlogs(res.data);
     });
 
     console.log("Running useEffect Read");
